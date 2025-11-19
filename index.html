@@ -36,6 +36,37 @@
         .header p {
             font-size: 1rem;
             opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .shuffle-button {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .shuffle-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: white;
+        }
+
+        .shuffle-button:active {
+            transform: translateY(0);
+        }
+
+        .shuffle-icon {
+            font-size: 1.2rem;
         }
 
         .container {
@@ -210,6 +241,10 @@
         <div class="header">
             <h1>🌿 Suomalaiset Kasvit</h1>
             <p>Klikkaa kysymysmerkkiä nähdäksesi kasvin nimen</p>
+            <button class="shuffle-button" id="shuffleBtn">
+                <span class="shuffle-icon">🔀</span>
+                <span>Sekoita kortit</span>
+            </button>
         </div>
 
         <div class="cards-grid" id="cardsContainer">
@@ -268,12 +303,31 @@
             return shuffled;
         }
 
+        function renderCards(plants) {
+            cardsContainer.innerHTML = '';
+            plants.forEach(plant => {
+                const card = createCard(plant);
+                cardsContainer.appendChild(card);
+            });
+        }
+
         const cardsContainer = document.getElementById('cardsContainer');
-        const shuffledPlants = shuffleArray(plantsData);
+        const shuffleBtn = document.getElementById('shuffleBtn');
         
-        shuffledPlants.forEach(plant => {
-            const card = createCard(plant);
-            cardsContainer.appendChild(card);
+        // Initial render
+        let shuffledPlants = shuffleArray(plantsData);
+        renderCards(shuffledPlants);
+
+        // Shuffle button click handler
+        shuffleBtn.addEventListener('click', () => {
+            shuffledPlants = shuffleArray(plantsData);
+            renderCards(shuffledPlants);
+            
+            // Add animation feedback
+            shuffleBtn.style.transform = 'rotate(180deg)';
+            setTimeout(() => {
+                shuffleBtn.style.transform = 'rotate(0deg)';
+            }, 300);
         });
     </script>
 </body>
